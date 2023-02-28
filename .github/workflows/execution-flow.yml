@@ -20,7 +20,7 @@ jobs:
       - name: Lint code
         run: npm run lint
   test:
-    needs: test
+    
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -65,7 +65,7 @@ jobs:
           name: dist-files
           path: dist
   deploy:
-    needs: build
+    needs: [ build, test ]
     runs-on: ubuntu-latest
     steps:
       - name: Get build artifacts
