@@ -28,8 +28,7 @@ jobs:
         id: set-result
         run: echo "::set-output name=step-result::success"
         
-      - uses: actions/checkout@v2  
-        
+             
       - name: Create ZIP deployment package
         run: zip -r deploy_package.zip ./
 
