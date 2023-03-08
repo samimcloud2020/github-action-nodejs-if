@@ -1,6 +1,6 @@
 name: reuse code
 permissions:
-  id-token: write
+  id-token: none
   contents: read
 on:
   workflow_call:
