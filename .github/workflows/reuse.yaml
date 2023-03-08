@@ -1,4 +1,4 @@
-nane: reuse code
+name: reuse code
 on:
   workflow_call:
     inputs:
