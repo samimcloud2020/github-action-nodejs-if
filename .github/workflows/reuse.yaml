@@ -1,7 +1,5 @@
 name: reuse code
-permissions:
-  id-token: none
-  contents: read
+permissions: read-all|write-all
 on:
   workflow_call:
     inputs:
