@@ -1,7 +1,5 @@
 name: reuse code
-permissions:
-  id-token: write # need this for OIDC
-  contents: read
+
 on:
   workflow_call:
     inputs:
