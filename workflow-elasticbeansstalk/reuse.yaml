@@ -1,0 +1,54 @@
+name: reuse code
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: artifact name
+        required: false
+        default: dist
+        type: string
+    outputs:
+      result:
+        description: result output
+        value: ${{ jobs.deploy.outputs.outcome }}    
+jobs:
+  deploy:
+    outputs:
+      outcome: ${{ steps.set-result.outputs.step-result }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.artifact-name }}
+      - name: list files
+        run: ls
+      - name: result output
+        id: set-result
+        run: echo "::set-output name=step-result::success"
+        
+             
+      - name: Create ZIP deployment package
+        run: zip -r deploy_package.zip ./
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws-region: "us-east-1"
+
+      - name: Upload package to S3 bucket
+        run: aws s3 cp deploy_package.zip s3://samim-nodejs-elasticbeansstalk/
+
+      - name: Create new ElasticBeanstalk Application Version
+        run: |
+          aws elasticbeanstalk create-application-version \
+          --application-name app1 \
+          --source-bundle S3Bucket="samim-nodejs-elasticbeansstalk",S3Key="deploy_package.zip" \
+          --version-label "ver-${{ github.sha }}" \
+          --description "commit-sha-${{ github.sha }}"
+
+      - name: Deploy new ElasticBeanstalk Application Version
+        run: aws elasticbeanstalk update-environment --environment-name App1-env-1 --version-label "ver-${{ github.sha }}"
