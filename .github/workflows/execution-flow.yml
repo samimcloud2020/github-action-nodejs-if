@@ -5,6 +5,7 @@ on:
       - main
 jobs:
   lint:
+    container: node:16
     runs-on: ubuntu-latest
     steps:
       - name: Get code
