@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: permission to root
+        run: sudo chmod -R 777 ./
      
       - name: Cache dependencies
         id: cache
@@ -21,13 +23,16 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Lint code
-        run: sudo npm run lint
+        run: npm run lint
   test:
     container: node:16
     runs-on: ubuntu-latest
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: permission to root
+        run: sudo chmod -R 777 ./
+       
      
       - name: Cache dependencies
         id: cache
@@ -40,7 +45,7 @@ jobs:
         run: npm ci
       - name: Test code
         id: run-tests
-        run: sudo npm run test
+        run: npm run test
       - name: Upload test report
         if: failure() && steps.run-tests.outcome == 'failure'
         uses: actions/upload-artifact@v3
@@ -54,6 +59,9 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: permission to root
+        run: sudo chmod -R 777 ./
+       
      
   
       - name: Cache dependencies
@@ -67,7 +75,7 @@ jobs:
         run: npm ci
       - name: Build website
         id: build-website
-        run: sudo npm run build
+        run:  npm run build
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
