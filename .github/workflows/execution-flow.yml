@@ -22,7 +22,7 @@ jobs:
       - name: Lint code
         run: npm run lint
   test:
-    
+    container: node:16
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -47,6 +47,7 @@ jobs:
           path: test.json
   build:
     needs: test
+    container: node:16
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -82,6 +83,7 @@ jobs:
       
   print-deploy-result:
     needs: deploy
+    container: node:16
     runs-on: ubuntu-latest
     steps:
       - name: print deploy output
@@ -90,6 +92,7 @@ jobs:
   report:
     if: failure()
     needs: [lint, deploy ]
+    container: node:16
     runs-on: ubuntu-latest
     steps:
       - name: output inf
