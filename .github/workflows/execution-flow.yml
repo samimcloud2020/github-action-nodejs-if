@@ -10,9 +10,7 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Reclaim cache directory
-        run: chown -R 1001:1001 /github/home/.cache && echo "pwn dat cache"
-  
+     
       - name: Cache dependencies
         id: cache
         uses: actions/cache@v3
@@ -23,16 +21,14 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Lint code
-        run: npm run lint
+        run: sudo npm run lint
   test:
     container: node:16
     runs-on: ubuntu-latest
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Reclaim cache directory
-        run: chown -R 1001:1001 /github/home/.cache && echo "pwn dat cache"
-         
+     
       - name: Cache dependencies
         id: cache
         uses: actions/cache@v3
@@ -44,7 +40,7 @@ jobs:
         run: npm ci
       - name: Test code
         id: run-tests
-        run: npm run test
+        run: sudo npm run test
       - name: Upload test report
         if: failure() && steps.run-tests.outcome == 'failure'
         uses: actions/upload-artifact@v3
@@ -58,8 +54,7 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Reclaim cache directory
-        run: chown -R 1001:1001 /github/home/.cache && echo "pwn dat cache"
+     
   
       - name: Cache dependencies
         id: cache
@@ -72,7 +67,7 @@ jobs:
         run: npm ci
       - name: Build website
         id: build-website
-        run: npm run build
+        run: sudo npm run build
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
