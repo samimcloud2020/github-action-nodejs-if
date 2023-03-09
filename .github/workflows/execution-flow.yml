@@ -5,7 +5,15 @@ on:
       - main
 jobs:
   lint:
-    container: node:16
+    container:
+      image: node:16
+      env:
+        NODE_ENV: development
+      ports:
+        - 80
+      volumes:
+        - my_docker_volume:/volume_mount
+      options: --cpus 1
     runs-on: ubuntu-latest
     steps:
       - name: Get code
